@@ -1,3 +1,4 @@
+# _*_ encoding: utf-8 _*_
 """muke URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -16,8 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.views.generic import TemplateView
+from django.views.static import serve
 import xadmin
-from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView
+from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView
+from organization.views import OrgListView
+from muke.settings import MEDIA_ROOT
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
@@ -26,5 +30,12 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('captcha/', include('captcha.urls')),
     re_path('active/(?P<active_code>\w+.*)/', ActiveUserView.as_view(), name="user_active"),
-    path('forget/', ForgetPwdView.as_view(), name='forget_pwd')
+    path('forget/', ForgetPwdView.as_view(), name='forget_pwd'),
+    re_path('reset/(?P<active_code>\w+.*)/', ResetView.as_view(), name="reset_pwd"),
+    path('modify_pwd/', ModifyPwdView.as_view(), name='modify_pwd'),
+
+    # 课程机构首页
+    path('org_list/', OrgListView.as_view(), name='org_list'),
+    # 配置上传文件的访问处理函数
+    re_path('media/(?P<path>.*)', serve, {"document_root":MEDIA_ROOT})
 ]
