@@ -17,6 +17,8 @@ class Course(models.Model):
     fav_nums = models.IntegerField(default=0, verbose_name=u'收藏人数')
     image = models.ImageField(upload_to='courses/%Y/%m', verbose_name=u'封面图', max_length=100)
     click_nums = models.IntegerField(default=0, verbose_name=u'点击数')
+    category = models.CharField(default=u'后端开发', max_length=20, verbose_name=u'课程类别')
+    tag = models.CharField(default='', verbose_name=u'课程标签', max_length=10,)
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u'添加时间')
 
     class Meta:
@@ -25,6 +27,27 @@ class Course(models.Model):
     #
     # def __unicode__(self):
     #     return self.name
+
+    def get_lesson_nums(self):
+        """
+        获取章节数
+        :return: 章节数
+        """
+        return self.lesson_set.all().count()
+
+    def get_learn_users(self):
+        """
+        获取学习用户
+        :return: 学习用户
+        """
+        return self.usercourse_set.all()[:5]
+
+    def get_lesson(self):
+        """
+        获取课程所有章节
+        :return:
+        """
+        return self.lesson_set.all()
 
     def __str__(self):
         return self.name
@@ -39,14 +62,28 @@ class Lesson(models.Model):
         verbose_name = u'章节'
         verbose_name_plural = verbose_name
 
+    def get_lesson_video(self):
+        """
+        获取章节视频信息
+        """
+        return self.video_set.all()
+
+    def __str__(self):
+        return self.name
+
+
 class Video(models.Model):
     lesson = models.ForeignKey(Lesson, verbose_name=u'章节', on_delete=models.CASCADE)
-    name = models.CharField(max_length=100, verbose_name=u'章节名')
+    name = models.CharField(max_length=100, verbose_name=u'视频名')
+    url = models.CharField(default='', max_length=200, verbose_name=u'访问地址')
     add_time = models.DateTimeField(default=datetime.now, verbose_name=u'添加时间')
 
     class Meta:
         verbose_name = u'视频'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
 
 
 class CourseResource(models.Model):
@@ -58,3 +95,6 @@ class CourseResource(models.Model):
     class Meta:
         verbose_name = u'课程资源'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
