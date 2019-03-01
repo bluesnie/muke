@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block title %}公开课{% endblock %}
+{% block title %}课程章节信息{% endblock %}
 {% block custom_css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/muke/base.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/muke/common-less.css' %}" />
@@ -31,21 +31,21 @@
                 <div style="height: 15px" class="path">
                 </div>
                 <div class="hd">
-                    <h2 class="l">django与vuejs实战项目2</h2>
+                    <h2 class="l">{{ course.name }}</h2>
                 </div>
                 <div class="statics clearfix">
                     <div class="static-item ">
-                        <span class="meta-value"><strong>高级</strong></span>
+                        <span class="meta-value"><strong>{{ course.get_degree_display }}</strong></span>
                         <span class="meta">难度</span>
                         <em></em>
                     </div>
                     <div class="static-item static-time">
-                        <span class="meta-value">0分钟</span>
+                        <span class="meta-value">{{ course.learn_times }}</span>
                         <span class="meta">时长</span>
                         <em></em>
                     </div>
                     <div class="static-item">
-                        <span class="meta-value"><strong>13</strong></span>
+                        <span class="meta-value"><strong>{{ course.students }}</strong></span>
                         <span class="meta">学习人数</span>
                         <em></em>
                     </div>
@@ -59,8 +59,8 @@
                 <div class="content">
                     <div class="mod-tab-menu">
                         <ul class="course-menu clearfix">
-                            <li><a class="ui-tabs-active active" id="learnOn"  href="course-video.html"><span>章节</span></a></li>
-                            <li><a id="commentOn" class="" href="course-comment.html"><span>评论</span></a></li>
+                            <li><a class="ui-tabs-active active" id="learnOn"  href="{% url 'course:course_info' course.id%}"><span>章节</span></a></li>
+                            <li><a id="commentOn" class="" href="{% url 'course:course_comment' course.id %}"><span>评论</span></a></li>
                         </ul>
                     </div>
                     <div id="notice" class="clearfix">
@@ -68,6 +68,7 @@
                     </div>
 
                     <div class="mod-chapters">
+
                         {% for lesson in course.get_lesson %}
                             <div class="chapter chapter-active" >
                             <h3>
@@ -77,7 +78,7 @@
 
                                 {% for video in lesson.get_lesson_video %}
                                     <li>
-                                        <a target="_blank" href='{{ video.url }}' class="J-media-item studyvideo">{{ video.name }}
+                                        <a target="_blank" href='{{ video.url }}' class="J-media-item studyvideo">{{ video.name }}({{ video.learn_times }})
                                             <i class="study-state"></i>
                                         </a>
                                     </li>
@@ -86,6 +87,7 @@
                             </ul>
                         </div>
                         {% endfor %}
+
                     </div>
 
                 </div>
@@ -95,33 +97,33 @@
                         <div class="box mb40">
                             <h4>资料下载</h4>
                             <ul class="downlist">
-
-                                <li>
-                                    <span ><i class="aui-iconfont aui-icon-file"></i>&nbsp;&nbsp;前端页面</span>
-                                    <a href="../media/course/resource/2016/11/media.zip" class="downcode" target="_blank" download="" data-id="274" title="">下载</a>
-                                </li>
-
+                                {% for resource in all_resources  %}
+                                    <li>
+                                        <span ><i class="aui-iconfont aui-icon-file"></i>&nbsp;&nbsp;{{ resource.name }}</span>
+                                        <a href="{{ MEDIA_URL }}{{ resource.download }}" class="downcode" target="_blank" download="" data-id="274" title="">下载</a>
+                                    </li>
+                                {% endfor %}
                             </ul>
                         </div>
                         <div class="box mb40">
                             <h4>讲师提示</h4>
                             <div class="teacher-info">
                                 <a href="/u/315464/courses?sort=publish" target="_blank">
-                                    <img src='../media/teacher/2016/11/aobama_CXWwMef.png' width='80' height='80' />
+                                    <img src='{{ MEDIA_URL }}{{ course.teacher.image }}' width='80' height='80' />
                                 </a>
             <span class="tit">
-              <a href="/u/315464/courses?sort=publish" target="_blank">bobby</a>
+              <a href="/u/315464/courses?sort=publish" target="_blank">{{ course.teacher.name }}</a>
             </span>
-                                <span class="job">xxx</span>
+                                <span class="job">{{ course.teacher.work_position }}</span>
                             </div>
                             <div class="course-info-tip">
                                 <dl class="first">
                                     <dt>课程须知</dt>
-                                    <dd class="autowrap">python基础你需要有</dd>
+                                    <dd class="autowrap">{{ course.youneed_know }}</dd>
                                 </dl>
                                 <dl>
                                     <dt>老师告诉你能学到什么？</dt>
-                                    <dd class="autowrap">django的进阶开发</dd>
+                                    <dd class="autowrap">{{ course.what_you_learn }}</dd>
                                 </dl>
                             </div>
                         </div>
