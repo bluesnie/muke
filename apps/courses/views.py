@@ -2,6 +2,7 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import HttpResponse
+from django.db.models import Q
 
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
@@ -16,6 +17,15 @@ class CourseListView(View):
     def get(self, request):
         all_courses = Course.objects.all().order_by('-add_time')
         hot_courses = all_courses.order_by('-click_nums')[:3]
+
+        # 课程搜索
+        search_keywords = request.GET.get('keywords', '')
+        if search_keywords:
+            # __contains相当于sql语句中的like语法，'i'表示不区分大小写,Q加|相当于or查询
+            all_courses = all_courses.filter(Q(name__icontains=search_keywords)
+                                             |Q(desc__icontains=search_keywords)
+                                             |Q(detail__icontains=search_keywords))
+
         # 课程排序
         sort = request.GET.get('sort', '')
         if sort:
@@ -25,6 +35,7 @@ class CourseListView(View):
             if sort == 'students':
                 #参与人数
                 all_courses = all_courses.order_by('-students')
+        # 
         # 对课程进行翻页
         try:
             page = request.GET.get('page', 1)
@@ -33,8 +44,8 @@ class CourseListView(View):
 
         # 传3个参数，第二个参数是显示每页数目
         p = Paginator(all_courses, 6, request=request)
-
         courses = p.page(page)
+
         return render(request, 'course-list.html', {
             'all_courses':courses,
             'sort':sort,
