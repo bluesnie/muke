@@ -56,7 +56,7 @@
                     {% for org in all_orgs.object_list %}
                         <dl class="des difdes">
                         <dt>
-                            <a href="org-detail-homepage.html">
+                            <a href="{% url 'org:org_home' org.id %}">
                                 <img width="200" height="120" class="scrollLoading" data-url="{{ MEDIA_URL }}{{ org.image }}" src="{% static 'media/org/2016/11/imooc.png' %}"/>
                             </a>
                         </dt>
@@ -75,12 +75,12 @@
                             </div>
                             <ul class="cont">
                                 <li class="first"><p class="pic9">课程数：<span>{{ org.course_nums }}</span></p><p class="c7">学习人数：<span>{{ org.students }}</span></p></li>
-                                <li class="c8" style="padding-left:18px;">北京市海淀区中关村北大街</li>
+                                <li class="c8" style="padding-left:18px;">{{ org.address }}</li>
                                 <li class="pic10" style="padding-left:18px;">经典课程：
 
-                                        <a href="/diary/19/">c语言基础入门</a>
-
-                                        <a href="/diary/16/">数据库基础</a>
+                                    {% for classic_course in org.get_classic_course %}
+                                        <a href="/diary/19/">{{ classic_course.name }}</a>
+                                    {% endfor %}
 
                                 </li>
                             </ul>
@@ -140,7 +140,7 @@
                          <dl class="des">
                             <dt class="num fl">{{ forloop.counter }}</dt>
                             <dd>
-                                <a href="/company/2/"><h1>{{ curent_org.name }}</h1></a>
+                                <a href="{% url 'org:org_home' curent_org.id %}"><h1>{{ curent_org.name }}</h1></a>
                                 <p>{{ curent_org.address }}</p>
                             </dd>
                         </dl>

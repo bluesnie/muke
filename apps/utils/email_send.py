@@ -18,12 +18,14 @@ def random_str(randomlength=8):
 
 def send_register_email(email, send_type='register'):
     email_record = EmailVerifyRecord()
-    code = random_str(16)
+    if send_type =='update_email':
+        code = random_str(4)
+    else:
+        code = random_str(16)
     email_record.code = code
     email_record.email = email
     email_record.send_type = send_type
     email_record.save()
-
 
     if send_type == 'register':
         email_title = "慕课网注册激活链接"
@@ -42,8 +44,8 @@ def send_register_email(email, send_type='register'):
         if send_status:
             pass
     elif send_type == 'update_email':
-        email_title = "慕课网注册重置邮箱链接"
-        email_body = "请点击下面的链接重置你邮箱的验证码为{0}".format(code)
+        email_title = "慕课网重置邮箱验证码"
+        email_body = "您的验证码为{0}".format(code)
 
         # 需要去settings配置邮箱发送
         send_status = send_mail(email_title, email_body, EMAIL_FROM, [email])

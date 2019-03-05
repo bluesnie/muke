@@ -4081,9 +4081,9 @@ footer .footer .line {
     background: url(../images/arrow.png) no-repeat 95% center;
 }
 
-.personal_list .left li:last-child {
-    border: 0;
-}
+/*.personal_list .left li:last-child {*/
+    /*border: 0;*/
+/*}*/
 
 .personal_list .left li:hover, .personal_list .left .active2 {
     background: #fff url(../images/arrow_g.png) no-repeat 95% center;

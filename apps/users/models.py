@@ -19,6 +19,15 @@ class UserProfile(AbstractUser):
         verbose_name = u"用户信息"
         verbose_name_plural = verbose_name
 
+
+    def unread_message(self):
+        """
+        获取用户未读消息
+        """
+        # 调用的时候再import不能放开头
+        from operation.models import UserMessage
+        return UserMessage.objects.filter(user=self.id, has_read=False).count()
+
     # def __unicode__(self):
     #     return self.username
     #
@@ -54,3 +63,6 @@ class Banner(models.Model):
     class Meta:
         verbose_name = u'轮播图'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.title

@@ -42,6 +42,12 @@ class CourseOrg(models.Model):
         """
         return self.teacher_set.all().count()
 
+    def get_classic_course(self):
+        """
+        获取经典课程
+        """
+        return self.course_set.all().order_by('-click_nums')[:3]
+
     def __str__(self):
         return self.name
 
@@ -60,6 +66,19 @@ class Teacher(models.Model):
     class Meta:
         verbose_name = u'教师'
         verbose_name_plural = verbose_name
+
+
+    def get_course_nums(self):
+        """
+        取出该教师的课程数
+        """
+        return self.course_set.all().count()
+
+    def get_courses(self):
+        """
+        取出该教师的课程
+        """
+        return self.course_set.all()
 
     def __str__(self):
         return self.name

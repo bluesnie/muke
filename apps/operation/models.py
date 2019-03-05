@@ -43,7 +43,7 @@ class UserFavorite(models.Model):
         verbose_name_plural = verbose_name
 
 
-class UseMessage(models.Model):
+class UserMessage(models.Model):
     user = models.IntegerField(default=0, verbose_name=u'接收用户') #默认0表示全体用户, 否则为用户id
     message = models.CharField(max_length=500, verbose_name=u'消息内容')
     has_read = models.BooleanField(default=False, verbose_name=u'是否已读') #False未读

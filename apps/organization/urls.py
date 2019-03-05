@@ -22,6 +22,7 @@ urlpatterns = [
 
     # 机构讲师
     path('teacher/list/', TeacherListView.as_view(), name='teacher_list'),
+
     # 讲师详情页
     re_path('teacher/info/(?P<teacher_id>\d+)/', TeacherInfoView.as_view(), name='teacher_info'),
 ]

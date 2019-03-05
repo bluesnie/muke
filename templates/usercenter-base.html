@@ -42,14 +42,12 @@
                                 </dl>
                                 <div class="btn">
 	                                <a class="personcenter fl" href="{% url 'users:user_info' %}">进入个人中心</a>
-{#	                                <a class="fr" href="{% url 'logout' %}">退出</a>#}
-	                                <a class="fr" href="#">退出</a>
+	                                <a class="fr" href="{% url 'logout' %}">退出</a>
                                 </div>
                             </div>
                         </div>
-{#                        <a href="{% url 'users:mymessage' %}">#}
-                        <a href="#">
-                            <div class="msg-num"> <span id="MsgNum">{{ request.user.unread_nums }}</span></div>
+                        <a href="{% url 'users:mymessage' %}">
+                            <div class="msg-num"> <span id="MsgNum">{{ request.user.unread_message }}</span></div>
                         </a>
                     {% else %}
                         <a style="color:white" class="fr registerbtn" href="{% url 'register' %}">注册</a>
@@ -74,8 +72,8 @@
     <section>
         <div class="wp">
             <ul  class="crumbs">
-                <li><a href="index.html">首页</a>></li>
-                <li><a href="/user/home/">个人中心</a>></li>
+                <li><a href="{% url 'index' %}">首页</a>></li>
+                <li><a href="{% url 'users:user_info' %}">个人中心</a>></li>
                 <li>个人信息</li>
             </ul>
         </div>
@@ -88,14 +86,10 @@
 	<div class="wp list personal_list">
 	<div class="left">
         <ul>
-            <li class="active2"><a href="usercenter-info.html">个人资料</a></li>
-            <li ><a href="usercenter-mycourse.html">我的课程</a></li>
-            <li ><a href="usercenter-fav-course.html">我的收藏</a></li>
-            <li >
-                <a href="usercenter-message.html" style="position: relative;">
-                    我的消息
-                </a>
-            </li>
+            <li class="{% ifequal current_page 'userinfo' %}active2{% endifequal %}"><a href="{% url 'users:user_info' %}">个人资料</a></li>
+            <li class="{% ifequal current_page 'courses' %}active2{% endifequal %}"><a href="{% url 'users:mycourses' %}">我的课程</a></li>
+            <li class="{% ifequal current_page 'fav' %}active2{% endifequal %}"><a href="{% url 'users:myfav_org' %}">我的收藏</a></li>
+            <li class="{% ifequal current_page 'm' %}active2{% endifequal %}"><a href="{% url 'users:mymessage' %}" style="position: relative;">我的消息</a></li>
         </ul>
 	</div>
 
@@ -162,7 +156,6 @@
 {#                <input type='hidden' name='csrfmiddlewaretoken' value='DaP7IUKm9FA9nELA9YUlYYWpyIDdCiIP' />#}
 {#            <input type='hidden' name='csrfmiddlewaretoken' value='799Y6iPeEDNSGvrTu3noBrO4MBLv6enY' />#}
             {% csrf_token %}
-            {% csrf_token %}
             </form>
         </div>
     </div>
@@ -185,6 +178,7 @@
 {#            <input type='hidden' name='csrfmiddlewaretoken' value='DaP7IUKm9FA9nELA9YUlYYWpyIDdCiIP' />#}
 {#        <input type='hidden' name='csrfmiddlewaretoken' value='799Y6iPeEDNSGvrTu3noBrO4MBLv6enY' />#}
         {% csrf_token %}
+{#        {% csrf_token %}#}
         </form>
     </div>
 
@@ -222,7 +216,8 @@
                 <input type="hidden" name="mobile" id="jsInpResetMobil" />
                 <input id="jsSetNewPwdBtn" type="button" value="提交" />
             </div>
-            <input type='hidden' name='csrfmiddlewaretoken' value='DaP7IUKm9FA9nELA9YUlYYWpyIDdCiIP' />
+{#            <input type='hidden' name='csrfmiddlewaretoken' value='DaP7IUKm9FA9nELA9YUlYYWpyIDdCiIP' />#}
+            {% csrf_token %}
         </form>
     </div>
     <div class="forgetbox dialogbox">
@@ -244,6 +239,7 @@
                     <input type="hidden" name="sms_type" value="1">
                     <input id="jsFindPwdBtn" type="button" value="提交" />
                 </div>
+                {% csrf_token %}
             </form>
         </div>
     </div>
@@ -276,7 +272,7 @@
                 data: {
                     fav_type: 1,
                     fav_id: favid,
-                    csrfmiddlewaretoken: '799Y6iPeEDNSGvrTu3noBrO4MBLv6enY'
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
                 async: true,
                 success: function(data) {
@@ -295,7 +291,7 @@
                     data: {
                         fav_type: 3,
                         fav_id: favid,
-                        csrfmiddlewaretoken: '799Y6iPeEDNSGvrTu3noBrO4MBLv6enY'
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
                     },
                     async: true,
                     success: function(data) {
@@ -315,7 +311,7 @@
                     data: {
                         fav_type: 2,
                         fav_id: favid,
-                        csrfmiddlewaretoken: '799Y6iPeEDNSGvrTu3noBrO4MBLv6enY'
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
                     },
                     async: true,
                     success: function(data) {

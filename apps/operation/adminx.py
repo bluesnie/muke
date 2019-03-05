@@ -4,7 +4,7 @@ __date__ = '2019/2/23 13:44'
 
 import xadmin
 
-from .models import UserAsk, UserCourse, CourseComments, UseMessage, UserFavorite
+from .models import UserAsk, UserCourse, CourseComments, UserMessage, UserFavorite
 
 
 class UserAskAdmin(object):
@@ -25,7 +25,7 @@ class UserFavoriteAdmin(object):
     list_filter = ['user', 'fav_id', 'fav_type', 'add_time']
 
 
-class UseMessageAdmin(object):
+class UserMessageAdmin(object):
     list_display = ['user', 'message', 'has_read', 'add_time']
     search_fields = ['user', 'message', 'has_read']
     list_filter = ['user', 'message', 'has_read', 'add_time']
@@ -40,5 +40,5 @@ class UserCourseAdmin(object):
 xadmin.site.register(UserAsk, UserAskAdmin)
 xadmin.site.register(UserCourse, UserCourseAdmin)
 xadmin.site.register(UserFavorite, UserFavoriteAdmin)
-xadmin.site.register(UseMessage, UseMessageAdmin)
+xadmin.site.register(UserMessage, UserMessageAdmin)
 xadmin.site.register(CourseComments, CourseCommentsAdmin)

@@ -95,6 +95,10 @@ class CourseInfoView(LoginRequiredMixin, View): # 继承LoginRequiredMixin来判
     def get(self, request, course_id):
         course = Course.objects.get(id=int(course_id))
 
+        # 增加课程学习人数
+        course.students += 1
+        course.save()
+
         # 查看该用户是否关联了该课程
         has_course = UserCourse.objects.filter(user=request.user, course=course)
         if not has_course:
