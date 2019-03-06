@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse
 
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
@@ -38,7 +39,6 @@ class LogoutView(View):
     """用户退出"""
     def get(self, request):
         logout(request)
-        from django.urls import reverse
         return HttpResponseRedirect(reverse('index'))
 
 class LoginView(View):
@@ -52,14 +52,17 @@ class LoginView(View):
         if login_form.is_valid():
             user_name = request.POST.get("username", '')
             pass_word = request.POST.get("password", '')
-            # 验证
+            # 验证，上面重写了authenticate方法
             user = authenticate(username=user_name, password=pass_word)
             if user is not None:
                 # 判断是否已激活
                 if user.is_active:
                     # 登录
                     login(request, user)
-                    return render(request, 'index.html', )
+                    # 如果直接这样的话，重新登录后会没有数据
+                    # return render(request, 'index.html', )
+                    return HttpResponseRedirect(reverse('index'))
+
                 else:
                     return render(request, 'login.html', {'msg': '用户未激活'})
             else:
@@ -362,3 +365,27 @@ class IndexView(View):
             'course_orgs':course_orgs,
 
         })
+
+
+def page_not_found(request):
+    """全局404处理函数"""
+    from django.shortcuts import render_to_response
+    response = render_to_response('404.html',{})
+    response.status_code = 404
+    return response
+
+
+def page_forbidden(request):
+    """全局403处理函数"""
+    from django.shortcuts import render_to_response
+    response = render_to_response('403.html',{})
+    response.status_code = 403
+    return response
+
+
+def server_error(request):
+    """全局500处理函数"""
+    from django.shortcuts import render_to_response
+    response = render_to_response('500.html',{})
+    response.status_code = 500
+    return response

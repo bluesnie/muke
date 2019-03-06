@@ -38,6 +38,14 @@ class Course(models.Model):
         :return: 章节数
         """
         return self.lesson_set.all().count()
+    # 给个显示名字
+    get_lesson_nums.short_description = u'章节数'
+
+    # 跳转函数
+    def go_to(self):
+        from django.utils.safestring import mark_safe
+        return mark_safe("<a href='http://www.bilibili.com'>跳转</a>")
+    go_to.short_description = u'跳转'
 
     def get_learn_users(self):
         """
@@ -62,6 +70,15 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class BannerCourse(Course):
+    """轮播课程model继承于Course,拥有Course所有方法和属性"""
+    class Meta:
+        verbose_name = u'轮播课程'
+        verbose_name_plural = verbose_name
+        # proxy必须设置为True,就不会另外生产一张表而是和Course同一张表
+        proxy = True
 
 
 class Lesson(models.Model):

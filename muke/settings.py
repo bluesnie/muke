@@ -24,9 +24,11 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 SECRET_KEY = 'sk#k*yp=_7l3f=f5ec_=qehr_f6sh-odphoh@h1&fo8ep6p@b-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# 生产环境中必须改为False,才能显示404等文件
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# 允许连接IP连接地址
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -51,6 +53,7 @@ INSTALLED_APPS = [
     'captcha',
     'pure_pagination',
 ]
+# 用户模块自定义继承后需要指定AUTH_USER_MODEL
 AUTH_USER_MODEL = 'users.UserProfile'
 
 MIDDLEWARE = [
@@ -160,11 +163,19 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-#静态文件目录
+#静态文件目录，当debug为False时，Django不会自动去取，这些静态文件而是由Apache等第三方代理
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+# 所以可以像媒体文件一样自定义一个函数处理
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, "/static/"),
+# )
+# STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
 
 # 媒体目录
 MEDIA_URL = '/media/'

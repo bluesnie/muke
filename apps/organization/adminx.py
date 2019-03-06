@@ -17,6 +17,8 @@ class CourseOrgAdmin(object):
     list_display = ['name', 'desc', 'click_nums', 'fav_nums', 'image', 'address', 'city', 'add_time']
     search_fields = ['name', 'desc', 'click_nums', 'fav_nums', 'image', 'address', 'city']
     list_filter = ['name', 'desc', 'click_nums', 'fav_nums', 'image', 'address', 'city', 'add_time']
+    # 当有一个model有一个外键指向它时，它是ajax加载方式完成，数据量过大时很有用，可进行搜索而不是下拉式
+    relfield_style = 'fk-ajax'
 
 
 class TeacherAdmin(object):

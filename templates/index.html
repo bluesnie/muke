@@ -65,7 +65,7 @@
 					<div class="module1_1 left">
 						<img width="228" height="614" src="/static/images/module1_1.jpg"/>
 						<p class="fisrt_word">名师授课<br/>专业权威</p>
-						<a class="more" href="course-list.html">查看更多课程 ></a>
+						<a class="more" href="{% url 'course:course_list' %}">查看更多课程 ></a>
 					</div>
 					<div class="right group_list">
 						    <div class="module1_2 box">
@@ -86,7 +86,7 @@
 							<div class="unslider-arrow2 next"></div>
 						</div>
                             {% for course in courses %}
-{#                                因为class中的数字不同所以样式不同，则需要改变,使用forloop.counter|add:'2'， count是1，count0是0，所以从3开始递增#}
+{#                                因为class中的数字不同所以样式不同，则需要改变,使用forloop.counter|add:'2'过滤器， count是1，count0是0，所以从3开始递增#}
                                 <div class="module1_{{ forloop.counter|add:'2' }} box">
                                     <a href="{% url 'course:course_detail' course.id %}">
                                         <img width="233" height="190" src="{{ MEDIA_URL }}{{ course.image }}"/>
@@ -118,18 +118,19 @@
 					<div class="module3_1 left">
 						<img width="228" height="463" src="/static/images/module3_1.jpg"/>
 						<p class="fisrt_word">名校来袭<br/>权威认证</p>
-						<a class="more" href="org-list.html">查看更多机构 ></a>
+						<a class="more" href="{% url 'org:org_list' %}">查看更多机构 ></a>
 					</div>
 					<div class="right">
 						<ul>
                             {% for org in course_orgs %}
-                                <li class="">
+{#                                使用过滤器实现能被5整除时显示class属性值#}
+                                <li class="{% if forloop.counter|divisibleby:5 %}five{% endif %}">
                                     <a href="{% url 'org:org_home' org.id %}">
                                         <div class="company">
                                             <img width="184" height="100" src="{{ MEDIA_URL }}{{ org.image }}"/>
                                             <div class="score">
                                                 <div class="circle">
-                                                    <h2>全国知名</h2>
+                                                    <h2>{{ org.tag }}</h2>
                                                 </div>
                                             </div>
                                         </div>

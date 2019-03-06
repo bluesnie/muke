@@ -44,5 +44,14 @@ urlpatterns = [
     path('users/', include('users.urls', namespace='users')),
 
     # 配置上传文件的访问处理函数
-    re_path('media/(?P<path>.*)', serve, {"document_root":MEDIA_ROOT})
+    re_path('media/(?P<path>.*)', serve, {"document_root":MEDIA_ROOT}),
+
+    # 配置静态文件的访问处理函数
+    # re_path('static/(?P<path>.*)', serve, {"document_root":STATIC_ROOT}),
+
 ]
+
+# 配置404等错误处理函数(配置后出错,待解决,注释)
+# handler404 = 'users.views.page_not_found'
+# handler403 = 'users.views.page_forbidden'
+# handler500 = 'users.views.server_error'
