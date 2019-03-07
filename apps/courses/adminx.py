@@ -30,6 +30,9 @@ class CourseAdmin(object):
     list_filter = ['name', 'desc', 'detail', 'degree', 'learn_times', 'students', 'fav_nums', 'image', 'click_nums',
                    'add_time']
 
+    # ico图标
+    model_icon = 'fa fa-file'
+
     # 排序规则
     ordering = ['-click_nums']
 
@@ -48,6 +51,13 @@ class CourseAdmin(object):
     # 自定义刷新时间,配置多个页面中可选
     refresh_times = [3, 5]
 
+    # 插件配置
+    # 1、指明某个字段用的是什么样式，下面就是指明detail是ueditor样式
+    style_fields = {"detail": "ueditor"}
+
+    # 2、导入Excel插件为True开启(有问题，待解决)
+    # import_excel = True
+
     # 重载方法过滤课程
     def queryset(self):
         qs = super(CourseAdmin, self).queryset()
@@ -64,6 +74,10 @@ class CourseAdmin(object):
             course_org.course_nums = Course.objects.filter(course_org=course_org).count()
             course_org.save()
 
+    def post(self, request, *args, **kwargs):
+        if 'excel' in request.FILES:
+            pass
+        return super(CourseAdmin, self).post(request, args, kwargs)
 
 class BannerCourseAdmin(object):
     """
@@ -75,6 +89,7 @@ class BannerCourseAdmin(object):
                      'click_nums']
     list_filter = ['name', 'desc', 'detail', 'degree', 'learn_times', 'students', 'fav_nums', 'image', 'click_nums',
                    'add_time']
+    model_icon = 'fa fa-file'
     # 排序规则
     ordering = ['-click_nums']
     # 设置某些字段为只读
@@ -95,12 +110,14 @@ class LessonAdmin(object):
     list_display = ['course', 'name', 'add_time']
     search_fields = ['course', 'name']
     list_filter = ['course__name', 'name', 'add_time'] #course__name外键设置
+    model_icon = 'fa fa-file-o'
 
 
 class VideoAdmin(object):
     list_display = ['lesson', 'name', 'add_time']
     search_fields = ['lesson', 'name']
     list_filter = ['lesson__name', 'name', 'add_time']#course__name外键设置
+    model_icon = 'fa fa-file-video-o'
 
 
 
@@ -108,6 +125,8 @@ class CourseResourceAdmin(object):
     list_display = ['course', 'name', 'download', 'add_time']
     search_fields = ['course', 'name', 'download']
     list_filter = ['course__name', 'name', 'download', 'add_time']
+    model_icon = 'fa fa-file-archive-o'
+
 
 
 

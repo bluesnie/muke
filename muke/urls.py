@@ -20,7 +20,7 @@ from django.views.generic import TemplateView
 from django.views.static import serve
 import xadmin
 from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView, LogoutView, IndexView
-from muke.settings import MEDIA_ROOT
+from muke.settings import MEDIA_ROOT, STATIC_ROOT
 
 urlpatterns = [
     path('xadmin/', xadmin.site.urls),
@@ -47,7 +47,10 @@ urlpatterns = [
     re_path('media/(?P<path>.*)', serve, {"document_root":MEDIA_ROOT}),
 
     # 配置静态文件的访问处理函数
-    # re_path('static/(?P<path>.*)', serve, {"document_root":STATIC_ROOT}),
+    re_path('static/(?P<path>.*)', serve, {"document_root":STATIC_ROOT}),
+
+    # 富文本相关url
+    path('ueditor/', include('DjangoUeditor.urls')),
 
 ]
 
